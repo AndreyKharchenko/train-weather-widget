@@ -83,7 +83,6 @@ export default defineComponent({
           try {
             const coord : ICoord = await getCoord(location);
             const weather = await getLocationWeather(coord);
-            console.log('weather', weather);
             if(Object.keys(weather).length) {
               locations.value = [...locations.value, {...make_locations_data(weather)}];
               setItems('locations', locations.value);
@@ -143,13 +142,11 @@ export default defineComponent({
       const initWidget =  async () => {
         const location_items = await JSON.parse(getItems("locations"));
         if(!location_items) {
-          console.log('1');
           const current_coord = await getCurrentPosition();
           const current_weather = await getLocationWeather(current_coord);
           locations.value = [...locations.value, {...make_locations_data(current_weather)}];
           setItems("locations", locations.value);
         } else {
-          console.log('2');
           locations.value = [...location_items];
         }
         

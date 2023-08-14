@@ -79,6 +79,7 @@ export default defineComponent({
 <style>
 #location-item {
     box-sizing: border-box;
+    margin-bottom: 10px;
 }
 #location-item .v-card-item__content {
     display: flex !important;;
