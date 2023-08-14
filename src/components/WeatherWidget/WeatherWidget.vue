@@ -27,6 +27,7 @@
 <script lang="ts">
 
 import { weatherAPI } from "@/api/weatherWidget";
+import useLocalStorage from "@/hooks/useLocalStorage";
 import useNavigator from "@/hooks/useNavigator";
 import { ILocation, ICoord } from "@/models/weatherWidget"
 import { defineComponent, onMounted, ref } from "vue"
@@ -42,7 +43,8 @@ export default defineComponent({
       const currentLocId = ref({});
 
       const {getCurrentPosition} = useNavigator();
-      
+      const {setItems, getItems} = useLocalStorage();
+
       const onDragStart = (e: any, location: ILocation) => {
         currentLocId.value = {...location};
       }
@@ -65,6 +67,8 @@ export default defineComponent({
 
         locations.value[loc1Idx] = {...loc2};
         locations.value[loc2Idx] = {...loc1};
+
+        setItems("locations", locations.value);
       }
 
       const onSettings = () => {
@@ -80,8 +84,10 @@ export default defineComponent({
             const coord : ICoord = await getCoord(location);
             const weather = await getLocationWeather(coord);
             console.log('weather', weather);
-            if(Object.keys(weather).length)
+            if(Object.keys(weather).length) {
               locations.value = [...locations.value, {...make_locations_data(weather)}];
+              setItems('locations', locations.value);
+            }
           } catch (error) {
             console.error('ERR: addLocation', error);
           }
@@ -89,6 +95,7 @@ export default defineComponent({
 
       const removeLocation = (id: number) => {
         locations.value = locations.value.filter(it => it.id != id);
+        setItems("locations", locations.value);
       }
 
       const getCoord = async (location: string): Promise<ICoord> => {
@@ -133,9 +140,18 @@ export default defineComponent({
       }
 
       const initWidget =  async () => {
-        const current_coord = await getCurrentPosition();
-        const current_weather = await getLocationWeather(current_coord);
-        locations.value = [...locations.value, {...make_locations_data(current_weather)}];
+        const location_items = await JSON.parse(getItems("locations"));
+        if(!location_items) {
+          console.log('1');
+          const current_coord = await getCurrentPosition();
+          const current_weather = await getLocationWeather(current_coord);
+          locations.value = [...locations.value, {...make_locations_data(current_weather)}];
+          setItems("locations", locations.value);
+        } else {
+          console.log('2');
+          locations.value = [...location_items];
+        }
+        
       }
 
       onMounted(initWidget);

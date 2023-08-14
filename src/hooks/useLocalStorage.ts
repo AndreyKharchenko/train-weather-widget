@@ -1,22 +1,18 @@
-import { onMounted, ref } from "vue";
+import { onMounted } from "vue";
 
-export default function useLocalStorage(key: string, initValue: any) {
-    const storedValue = ref('');
-    
-    const initStoredValue = () => {
-        const item = window.localStorage.getItem(key);
-        storedValue.value = item ? JSON.parse(item) : initValue;
+export default function useLocalStorage() {
+    const setItems = (key: string, value: any) => {
+        localStorage.setItem(key, JSON.stringify(value));
     }
 
-    const setValue = (value: string) => {
-        storedValue.value = value;
-        window.localStorage.setItem(key, JSON.stringify(value));
+    const getItems = (key: string) => {
+        //return JSON.parse(localStorage.getItem(key) || "");
+        const data = localStorage.getItem(key);
+        return JSON.parse(JSON.stringify(data) || '');
     }
-
-    onMounted(initStoredValue);
 
     return {
-        storedValue,
-        setValue
+        setItems,
+        getItems
     }
 }
