@@ -8,7 +8,8 @@ export interface ILocation {
     humidity: number,
     clouds: number,
     visibility: number | string,
-    weather: IWeather
+    weather: IWeather,
+    country_code: string
 }
 
 export interface ICoord {

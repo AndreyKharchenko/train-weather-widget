@@ -136,6 +136,7 @@ export default defineComponent({
             description: weather.weather[0].description, 
             iconURL: `https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`
           },
+          country_code: weather.sys.country
         }
       }
 

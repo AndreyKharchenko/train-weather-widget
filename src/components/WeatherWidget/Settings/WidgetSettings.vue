@@ -96,7 +96,7 @@ export default defineComponent({
 }
 
 .location-list .v-list-item {
-  background-color: darkgrey;
+  background-color: rgb(231, 223, 223);
   margin-bottom: 10px;
 }
 

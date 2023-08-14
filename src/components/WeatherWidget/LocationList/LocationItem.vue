@@ -6,7 +6,7 @@
         id='location-item'
     >
         <v-card-item>
-            <div class="location">{{location.name}}</div>
+            <div class="location">{{location.name + ", " + location.country_code}}</div>
             <div 
                 v-if="isFirst"
                 @click="$emit('onSettings')"
